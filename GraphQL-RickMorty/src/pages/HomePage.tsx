@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 
+const allCharactersDocument = graphql(/* GraphQL */ `
+  query allCharactersQuery($page: Int) {
+    characters (page: $page) {
+      results {
+        id
+        name
+        image
+      }
+    }
+  }
+`)        
+
 const HomePage = () => {
   useEffect(() => {
     document.title = "Accueil";
@@ -21,6 +33,8 @@ const HomePage = () => {
   // if (error) {
   //   toast.error(error);
   // }
+  
+  const { data } = useQuery(allCharactersDocument, {variables: {page}});
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
@@ -30,6 +44,16 @@ const HomePage = () => {
         </h1>
         <p className="text-gray-700">
           Explore the universe of Rick and Morty using GraphQL.
+          {data?.characters?.results?.map((character: any) => (
+            <div key={character.id} className="flex items-center space-x-4">
+              <img
+                src={character.image}
+                alt={character.name}
+                className="w-12 h-12 rounded-full"
+              />
+              <p>{character.name}</p>
+            </div>
+          ))}
         </p>
       </div>
 
