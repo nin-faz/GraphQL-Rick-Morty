@@ -8,6 +8,7 @@ function App() {
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
 
       <Router>
+        {/* <div className="min-h-screen bg-gray-900 flex flex-col"> */}
         <Routes>
           <Route path="/" element={<HomePage />} />
 
@@ -20,6 +21,7 @@ function App() {
             }
           />
         </Routes>
+        {/* </div> */}
       </Router>
     </>
   );

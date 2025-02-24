@@ -1,17 +1,23 @@
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
+import CharacterList from "../components/CharacterList";
+import { useQuery } from "@apollo/client";
+import { graphql } from "../gql";
 
 const allCharactersDocument = graphql(/* GraphQL */ `
   query allCharactersQuery($page: Int) {
-    characters (page: $page) {
+    characters(page: $page) {
       results {
         id
         name
         image
       }
+      info {
+        pages
+      }
     }
   }
-`)        
+`);
 
 const HomePage = () => {
   useEffect(() => {
@@ -19,22 +25,12 @@ const HomePage = () => {
   }, []);
 
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(5);
 
-  const [loading, setLoading] = useState(false);
+  const { data, loading } = useQuery(allCharactersDocument, {
+    variables: { page },
+  });
 
-  // const {
-  //   movies = [],
-  //   totalPages,
-  //   loading,
-  //   error,
-  // } = useMovies(searchTerm, filter, page);
-
-  // if (error) {
-  //   toast.error(error);
-  // }
-  
-  const { data } = useQuery(allCharactersDocument, {variables: {page}});
+  const totalPages = data?.characters?.info?.pages || 1;
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
@@ -44,16 +40,6 @@ const HomePage = () => {
         </h1>
         <p className="text-gray-700">
           Explore the universe of Rick and Morty using GraphQL.
-          {data?.characters?.results?.map((character: any) => (
-            <div key={character.id} className="flex items-center space-x-4">
-              <img
-                src={character.image}
-                alt={character.name}
-                className="w-12 h-12 rounded-full"
-              />
-              <p>{character.name}</p>
-            </div>
-          ))}
         </p>
       </div>
 
@@ -61,17 +47,9 @@ const HomePage = () => {
         <Loader />
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
-          <p> perso ici</p>
-          {/* {characters?.length > 0 ? (
-            characters.map((character) => (
-              <CharacterList key={character.id} character={character} />
-            ))
-          ) : (
-            <p className="text-center col-span-full text-white">
-              Aucun personnage trouvé
-            </p>
-          ) 
-          }*/}
+          {data?.characters?.results?.map((character: any) => (
+            <CharacterList key={character.id} character={character} />
+          ))}
         </div>
       )}
 
