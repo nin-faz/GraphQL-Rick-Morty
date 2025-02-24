@@ -14,9 +14,11 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "\n  query characterDetails($id: ID!) {\n    character(id: $id) {\n      id\n      name\n      status\n      species\n      type\n      gender\n      image\n    }\n  }\n": typeof types.CharacterDetailsDocument,
     "\n  query allCharactersQuery($page: Int) {\n    characters(page: $page) {\n      results {\n        id\n        name\n        image\n      }\n      info {\n        pages\n      }\n    }\n  }\n": typeof types.AllCharactersQueryDocument,
 };
 const documents: Documents = {
+    "\n  query characterDetails($id: ID!) {\n    character(id: $id) {\n      id\n      name\n      status\n      species\n      type\n      gender\n      image\n    }\n  }\n": types.CharacterDetailsDocument,
     "\n  query allCharactersQuery($page: Int) {\n    characters(page: $page) {\n      results {\n        id\n        name\n        image\n      }\n      info {\n        pages\n      }\n    }\n  }\n": types.AllCharactersQueryDocument,
 };
 
@@ -34,6 +36,10 @@ const documents: Documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query characterDetails($id: ID!) {\n    character(id: $id) {\n      id\n      name\n      status\n      species\n      type\n      gender\n      image\n    }\n  }\n"): (typeof documents)["\n  query characterDetails($id: ID!) {\n    character(id: $id) {\n      id\n      name\n      status\n      species\n      type\n      gender\n      image\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

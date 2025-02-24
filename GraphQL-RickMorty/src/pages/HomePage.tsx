@@ -3,6 +3,7 @@ import Loader from "../components/Loader";
 import CharacterList from "../components/CharacterList";
 import { useQuery } from "@apollo/client";
 import { graphql } from "../gql";
+import { toast } from "react-toastify";
 
 const allCharactersDocument = graphql(/* GraphQL */ `
   query allCharactersQuery($page: Int) {
@@ -26,19 +27,23 @@ const HomePage = () => {
 
   const [page, setPage] = useState(1);
 
-  const { data, loading } = useQuery(allCharactersDocument, {
+  const { data, error, loading } = useQuery(allCharactersDocument, {
     variables: { page },
   });
 
-  const totalPages = data?.characters?.info?.pages || 1;
+  const totalPages = data?.characters?.info?.pages ?? 1;
+
+  if (error) {
+    toast.error("Erreur");
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4">
+    <div className="min-h-screen bg-gradient-to-r from-purple-700 via-blue-600 to-indigo-500 flex flex-col items-center justify-center">
+      <div className="bg-white p-8 bg-opacity-10 rounded-lg shadow-2xl backdrop-blur-md text-center">
+        <h1 className="text-4xl font-bold text-yellow-400 mb-4">
           Welcome to the Rick and Morty GraphQL App
         </h1>
-        <p className="text-gray-700">
+        <p className="text-gray-300">
           Explore the universe of Rick and Morty using GraphQL.
         </p>
       </div>
