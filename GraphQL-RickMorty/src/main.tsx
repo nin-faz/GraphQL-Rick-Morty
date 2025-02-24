@@ -9,20 +9,20 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-client
-  .query({
-    query: gql`
-      query {
-        characters {
-          results {
-            name
-            image
-          }
-        }
-      }
-    `
-  })
-  .then(result => console.log(result));
+// client
+//   .query({
+//     query: gql`
+//       query {
+//         characters {
+//           results {
+//             name
+//             image
+//           }
+//         }
+//       }
+//     `
+//   })
+//   .then(result => console.log(result));
 
 createRoot(document.getElementById('root')!).render(
   <ApolloProvider client={client}>
